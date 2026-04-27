@@ -1,6 +1,11 @@
 # Divide-and-Learn
 
-PyTorch implementation of **Divide & Learn: Multi-Objective Combinatorial Optimization at Scale**, with benchmarks on MOCO datasets (TSP, Knapsack, CVRP) and HW-SF datasets.
+PyTorch official implementation of [**Divide & Learn: Multi-Objective Combinatorial Optimization at Scale**](https://arxiv.org/abs/2602.11346), with benchmarks on MOCO datasets (TSP, Knapsack, CVRP) and HW-SF datasets.
+
+**Authors:** Esha Singh, Dongxia Wu, Chien-Yi Yang, Tajana Rosing, Rose Yu, Yi-An Ma — arXiv preprint, 2026.
+
+**TL;DR.** We reformulate multi-objective combinatorial optimization as online bandit learning over decomposed decision spaces, achieving substantially better efficiency than surrogate-modelling MOBO at scale.
+
 
 ## Repository layout
 
@@ -132,3 +137,19 @@ The script is a thin wrapper over `python benchmarking.py --config configs/ucb.y
 1. Add the wrapper class to `src/divide_n_learn/`.
 2. Register it in `ALGORITHM_REGISTRY` in `benchmarking.py`.
 3. Add a config in `configs/<name>.yaml`.
+
+## Citation
+
+If you find our work useful, please cite it as:
+
+> Singh, E., Wu, D., Yang, C.-Y., Rosing, T., Yu, R., & Ma, Y.-A. (2026). *Divide and Learn: Multi-Objective Combinatorial Optimization at Scale.* arXiv preprint [arXiv:2602.11346](https://arxiv.org/abs/2602.11346).
+
+```bibtex
+@article{singh2026divide,
+  title   = {Divide and Learn: Multi-Objective Combinatorial Optimization at Scale},
+  author  = {Singh, Esha and Wu, Dongxia and Yang, Chien-Yi and Rosing, Tajana and Yu, Rose and Ma, Yi-An},
+  journal = {arXiv preprint arXiv:2602.11346},
+  year    = {2026},
+  url     = {https://arxiv.org/abs/2602.11346}
+}
+```
