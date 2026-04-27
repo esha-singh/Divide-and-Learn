@@ -216,3 +216,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# custom
+results/
+benchmark_results_OL_*/
+results_MOCO_April/

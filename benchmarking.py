@@ -82,6 +82,9 @@ def run_benchmark(
     print(f"Using device: {device}")
 
     timestamp = time.strftime("%Y%m%d-%H%M%S")
+    run_dir = os.path.join("results", f"{method_name}_{timestamp}")
+    os.makedirs(run_dir, exist_ok=True)
+
     results: Dict[str, Any] = {}
     config_out = {
         "metadata": {"timestamp": timestamp, "num_runs": num_runs, "device": device.type, "method": method_name},
@@ -93,7 +96,7 @@ def run_benchmark(
 
     results[method_name] = {}
     config_out["results"][method_name] = {}
-    temp_evaluator = MOCOEvaluator(reference_point=(1.0, 1.0))
+    temp_evaluator = MOCOEvaluator(reference_point=(1.0, 1.0), results_dir=run_dir)
 
     for problem_type, sizes in problems.items():
         if problem_type not in PROBLEM_MAP:
@@ -116,7 +119,7 @@ def run_benchmark(
 
             evaluator = MOCOEvaluator(
                 reference_point=reference_point,
-                results_dir=f"benchmark_results_OL_{timestamp}",
+                results_dir=run_dir,
             )
             evaluator.parallel = False
 
@@ -157,12 +160,11 @@ def run_benchmark(
     overall_time = time.time() - overall_start
     config_out["metadata"]["overall_time"] = overall_time
 
-    os.makedirs("results", exist_ok=True)
-    out_path = f"results/benchmark_{method_name}_{timestamp}.yaml"
+    out_path = os.path.join(run_dir, "summary.yaml")
     try:
         with open(out_path, "w") as f:
             yaml.dump(config_out, f, default_flow_style=False)
-        print(f"\nResults saved to: {out_path}")
+        print(f"\nRun artefacts saved to: {run_dir}/")
     except Exception as e:
         print(f"Error saving results: {e}")
 
