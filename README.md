@@ -39,29 +39,6 @@ To run 200 instances of the UCB variant on the default problem set:
 bash scripts/run_ucb_200.sh
 ```
 
-
-## Repository Layout
-
-```
-.
-├── benchmarking.py              # CLI entry point — run benchmarks from a YAML config
-├── benchmarking_helper.py       # Helpers for legacy / problem-specific runs
-├── configs/                     # Per-method YAML configs
-│   ├── ucb.yaml                 # UCB-Hedge variant
-│   └── ts.yaml                  # Thompson-Sampling variant
-├── MOCO/                        # Problem definitions + evaluator
-│   ├── problems.py              # BiObjectiveTSP, MultiObjectiveKnapsack, ...
-│   └── evaluation.py            # MOCOEvaluator (HV, runtime, etc.)
-├── src/
-│   ├── divide_n_learn/          # Our methods
-│   │   ├── our_method_UCB_combinatorial_bandit.py
-│   │   ├── our_method_TS_combinatorial_bandit.py
-│   │   └── pertubation.py
-│   └── baselines/               # Baselines (NSGA-II, etc.)
-└── results/                     # Created at runtime — per-run YAML summaries
-```
-
-
 ## Running Benchmarks
 
 All benchmarks run through `benchmarking.py`. The CLI accepts either a YAML config (recommended) or inline arguments — **CLI flags override YAML values**.
