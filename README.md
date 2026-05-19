@@ -1,13 +1,46 @@
-# Divide-and-Learn
+<div align="center">
 
-PyTorch official implementation of [**Divide & Learn: Multi-Objective Combinatorial Optimization at Scale**](https://arxiv.org/abs/2602.11346), with benchmarks on MOCO datasets (TSP, Knapsack, CVRP) and HW-SF datasets.
+# Divide & Learn: Multi-Objective Combinatorial Optimization at Scale (ICML 2026)
 
-**Authors:** Esha Singh, Dongxia Wu, Chien-Yi Yang, Tajana Rosing, Rose Yu, Yi-An Ma — arXiv preprint, 2026.
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![arXiv](https://img.shields.io/badge/arXiv-2602.11346-b31b1b.svg)](https://arxiv.org/abs/2602.11346)
 
-**TL;DR.** We reformulate multi-objective combinatorial optimization as online bandit learning over decomposed decision spaces, achieving substantially better efficiency than surrogate-modelling MOBO at scale.
+PyTorch official implementation, with benchmarks on MOCO (TSP, Knapsack, CVRP) and HW-SF datasets.
+
+![Divide & Learn Demo](https://github.com/esha-singh/assets/raw/main/dnl-example.gif)
+
+</div>
+
+We reformulate multi-objective combinatorial optimization as online bandit learning over decomposed decision spaces, achieving substantially better efficiency than surrogate-modelling MOBO at scale.
 
 
-## Repository layout
+## 🛠️ Environment
+
+Requires Python 3.9+. Inside a virtual environment, install the required packages using pip:
+
+```bash
+pip install torch numpy pyyaml scipy matplotlib pymoo pygmo
+```
+
+
+## 🚀 Quickstart
+
+Run a benchmark out-of-the-box using one of the provided YAML configs:
+
+```bash
+python benchmarking.py --config configs/ucb.yaml
+python benchmarking.py --config configs/ts.yaml
+```
+
+To run 200 instances of the UCB variant on the default problem set:
+
+```bash
+bash scripts/run_ucb_200.sh
+```
+
+
+## Repository Layout
 
 ```
 .
@@ -28,24 +61,10 @@ PyTorch official implementation of [**Divide & Learn: Multi-Objective Combinator
 └── results/                     # Created at runtime — per-run YAML summaries
 ```
 
-## Installation
 
-Requires Python 3.9+.
+## Running Benchmarks
 
-```bash
-pip install torch numpy pyyaml scipy matplotlib pymoo pygmo
-```
-
-## Running benchmarks
-
-All benchmarks run through `benchmarking.py`. The CLI accepts either a YAML config (recommended) or inline arguments — CLI flags override YAML values.
-
-### From a YAML config
-
-```bash
-python benchmarking.py --config configs/ucb.yaml
-python benchmarking.py --config configs/ts.yaml
-```
+All benchmarks run through `benchmarking.py`. The CLI accepts either a YAML config (recommended) or inline arguments — **CLI flags override YAML values**.
 
 ### Inline overrides
 
@@ -75,7 +94,7 @@ python benchmarking.py \
   --params '{"learning_rate": 0.5, "decomposition_size": 25, "overlap": 18, "max_iterations": 150}'
 ```
 
-## Config schema (`configs/*.yaml`)
+### Config schema (`configs/*.yaml`)
 
 ```yaml
 method_name: UCBHedgeHybridOCOAcc       # display name (also used for results filename)
@@ -105,6 +124,7 @@ Problem parameter keys per problem type:
 | `MultiObjectiveKnapsack` | `n_items`, `n_objectives`, `capacity`            |
 | `BiObjectiveCVRP`        | `n_customers` (optional `n_vehicles`)            |
 
+
 ## Output
 
 Each invocation creates one folder `results/<method_name>_<timestamp>/` containing:
@@ -112,15 +132,12 @@ Each invocation creates one folder `results/<method_name>_<timestamp>/` containi
 - `summary.yaml` — per-(problem, size) hypervolume, runtime, non-dominated count, and run metadata.
 - `<method>_<problem>_<iso-timestamp>.json` — detailed per-run artefacts written by `MOCOEvaluator` (one JSON per problem evaluated). Includes `individual_runs` (one entry per seed) and aggregate `statistics` (mean / median / std / cv).
 
-## Multiple seeds / instances
 
-`num_runs` controls how many problem instances are sampled — `MOCOEvaluator` uses `seed = run + 1` (so `num_runs=200` means seeds 1..200), regenerating the problem instance each time. To run 200 instances:
+## Multiple Seeds / Instances
 
-```bash
-bash scripts/run_ucb_200.sh
-```
+`num_runs` controls how many problem instances are sampled — `MOCOEvaluator` uses `seed = run + 1` (so `num_runs=200` means seeds 1..200), regenerating the problem instance each time.
 
-Customize via env vars or arguments:
+Customize via env vars or positional arguments:
 
 ```bash
 # Override config / seeds / device
@@ -132,17 +149,17 @@ bash scripts/run_ucb_200.sh '{"BiObjectiveTSP": {"large": {"n_cities": 100}}}'
 
 The script is a thin wrapper over `python benchmarking.py --config configs/ucb.yaml --num-runs 200`. The TS variant runs the same way: `python benchmarking.py --config configs/ts.yaml --num-runs 200`.
 
-## Adding a new method
+
+## Adding a New Method
 
 1. Add the wrapper class to `src/divide_n_learn/`.
 2. Register it in `ALGORITHM_REGISTRY` in `benchmarking.py`.
 3. Add a config in `configs/<name>.yaml`.
 
+
 ## Citation
 
-If you find our work useful, please cite it as:
-
-> Singh, E., Wu, D., Yang, C.-Y., Rosing, T., Yu, R., & Ma, Y.-A. (2026). *Divide and Learn: Multi-Objective Combinatorial Optimization at Scale.* arXiv preprint [arXiv:2602.11346](https://arxiv.org/abs/2602.11346).
+If you find our work useful, please cite:
 
 ```bibtex
 @article{singh2026divide,
